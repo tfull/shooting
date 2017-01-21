@@ -1,5 +1,4 @@
 #include "Game.h"
-#include <GL/glut.h>
 
 Game::Game(){
 }
