@@ -1,13 +1,19 @@
-compiler = g++-5
+compiler = g++
 sources = Game Keyboard Main
 target = main
+OS = ${shell uname -s}
+ifeq ($(OS), Darwin)
 options = -framework GLUT -framework OpenGL
+endif
+ifeq ($(OS), Linux)
+libs = -lglut -lGLU -lGL -lm
+endif
 
 bin/$(target): $(addsuffix .o, $(addprefix bin/, $(sources)))
-	$(compiler) $(options) -o $@ $^
+	$(compiler) $(options) -o $@ $^ $(libs)
 
 bin/%.o: src/%.cpp
-	$(compiler) $(options) -c -o $@ $<
+	$(compiler) $(options) -c -o $@ $< $(libs)
 
 .PHONY: clean
 clean:
