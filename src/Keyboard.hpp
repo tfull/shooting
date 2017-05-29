@@ -1,5 +1,5 @@
-#ifndef __KEYBOARD_H__
-#define __KEYBOARD_H__
+#ifndef __KEYBOARD_HPP__
+#define __KEYBOARD_HPP__
 
 class Keyboard{
 private:
@@ -15,6 +15,7 @@ public:
     void specialUp(int);
     int getCharCount(unsigned char);
     int getSpecialCount(int);
+    void printDebug();
 };
 
 #endif

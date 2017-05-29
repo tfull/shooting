@@ -1,5 +1,5 @@
 compiler = g++
-sources = Game Keyboard Main
+sources = Game Keyboard Main Extention
 target = main
 OS = ${shell uname -s}
 ifeq ($(OS), Darwin)

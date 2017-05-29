@@ -1,10 +1,11 @@
 #include <GL/glut.h>
-#include "Game.h"
-#include "Keyboard.h"
+#include "Game.hpp"
+#include "Keyboard.hpp"
+#include "Constant.hpp"
+#include "Extention.hpp"
 #include <iostream>
-
-const int SCREEN_WIDTH = 1280;
-const int SCREEN_HEIGHT = 720;
+#include <cstdio>
+#include <cstdlib>
 
 const int SCENE_COUNT_MAX = 1000000;
 
@@ -17,6 +18,8 @@ namespace object{
     int scene_count = 0;
     static Game *game = new Game();
     static Keyboard *keyboard = new Keyboard();
+    int selected_stage = 1;
+    int opened_stage = 10;
 }
 
 void changeScene(Scene scene){
@@ -27,8 +30,11 @@ void changeScene(Scene scene){
 void displayStart(){
     glClearColor(0.0, 0.0, 0.0, 0.0);
     glClear(GL_COLOR_BUFFER_BIT);
-    glColor4f(0.7, 0.2, 0.2, 0.0);
-    glRectf(-0.5, 0.5, 0.5, -0.5);
+    //glColor4f(0.7, 0.2, 0.2, 0.0);
+    //glRectf(-0.5, 0.5, 0.5, -0.5);
+    glColor4f(1.0, 1.0, 1.0, 0.0);
+    glRasterPos2d(0.0, 0.0);
+    drawString(GLUT_BITMAP_HELVETICA_18, (char*)"Shooting");
     glFlush();
 }
 
@@ -36,6 +42,16 @@ void displayShop(){
 }
 
 void displaySelect(){
+    glClearColor(0.0, 0.0, 0.0, 0.0);
+    glClear(GL_COLOR_BUFFER_BIT);
+    glColor4f(0.4, 0.1, 0.2, 0.0);
+    glRectf(-0.5, 0.5, 0.5, -0.5);
+    glColor4f(1.0, 1.0, 1.0, 0.0);
+    glRasterPos2d(0.0, 0.0);
+    char s[10];
+    std::sprintf(s, "%d", object::selected_stage);
+    drawString(GLUT_BITMAP_HELVETICA_18, s);
+    glFlush();
 }
 
 void displayGame(){
@@ -75,15 +91,27 @@ void specialUp(int i, int x, int y){
 }
 
 void operateStart(){
-  if(object::scene_count > 5 && object::keyboard->getCharCount('n') > 0){
-      changeScene(S_GAME);
-  }
+    if(object::scene_count > 5 && object::keyboard->getCharCount(KEYBOARD_ENTER) > 0){
+        changeScene(S_SELECT);
+    }
 }
 
 void operateShop(){
 }
 
 void operateSelect(){
+    if(object::scene_count > 5 && object::keyboard->getCharCount(KEYBOARD_ENTER) > 0){
+        // select 
+        changeScene(S_GAME);
+    }else if(object::scene_count > 5 && object::keyboard->getSpecialCount(GLUT_KEY_UP) % 5 == 1){
+        if(object::selected_stage > 1){
+            object::selected_stage -= 1;
+        }
+    }else if(object::scene_count > 5 && object::keyboard->getSpecialCount(GLUT_KEY_DOWN) % 5 == 1){
+        if(object::selected_stage < object::opened_stage){
+            object::selected_stage += 1;
+        }
+    }
 }
 
 void operateGame(){
@@ -98,8 +126,6 @@ void operate(int value){
     if(object::scene_count > SCENE_COUNT_MAX){
         object::scene_count = SCENE_COUNT_MAX;
     }
-
-    std::cout << "a: " << object::keyboard->getCharCount('a') << std::endl;
 
     if(object::scene == S_START){
         operateStart();

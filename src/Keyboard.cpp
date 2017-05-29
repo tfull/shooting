@@ -1,4 +1,4 @@
-#include "Keyboard.h"
+#include "Keyboard.hpp"
 #include <map>
 #include <iostream>
 
@@ -71,6 +71,26 @@ void Keyboard::update(){
                 this->property->special_count[it->first] += 1;
             }else{
                 this->property->special_count[it->first] = 0;
+            }
+        }
+    }
+}
+
+void Keyboard::printDebug(){
+    std::cout << "char" << std::endl;
+    for(int i = 0; i < 256; i++){
+        int count = this->property->char_count[i];
+        if(count > 0){
+            std::cout << ' ' << i << ": " << count << std::endl;
+        }
+    }
+
+    std::cout << "special" << std::endl;
+    for(std::map<int, bool>::iterator it = this->property->special_down.begin(); it != this->property->special_down.end(); it++){
+        if(! (this->property->special_count.find(it->first) == this->property->special_count.end())){
+            int count = this->property->special_count[it->first] > 0;
+            if(count > 0){
+                std::cout << ' ' << it->first << ": " << count << std::endl;
             }
         }
     }

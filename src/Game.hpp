@@ -1,5 +1,5 @@
-#ifndef __GAME_H__
-#define __GAME_H__
+#ifndef __GAME_HPP__
+#define __GAME_HPP__
 
 class Game{
     void operate();
